@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: fastapi-file-converter
+    plan: free
+    envVars:
+      - key: SUPABASE_URL
+        value: https://pvrjxzcftvtkokhkkvro.supabase.co
+      - key: SUPABASE_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2cmp4emNmdHZ0a29raGtrdnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxODk4ODcsImV4cCI6MjA1OTc2NTg4N30.kdTt_ACqwYQ8lqKg6jIRTgPrztrtYOK814ExdXzUl4w
+
+
