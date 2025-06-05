@@ -6,3 +6,4 @@ supabase
 python-dotenv
 python-multipart
 pillow
+pandas
