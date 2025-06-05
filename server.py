@@ -101,6 +101,18 @@ def upload_images_to_supabase(image_paths: list, folder_id: str) -> list:
 
 @app.post("/generate-report")
 def generate_report(session_id: int = Query(...)):
+
+    try:
+        update_response = supabase.table("session").update({
+            "active": False
+        }).eq("id", session_id).execute()
+
+        if not update_response.data:
+            raise HTTPException(status_code=404, detail="Session update failed")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update session: {str(e)}")
+    
+
     try:
         response = supabase.rpc("get_session_report", {"session_id_input": session_id}).execute()
     except Exception as e:
@@ -130,7 +142,6 @@ def generate_report(session_id: int = Query(...)):
     try:
         update_response = supabase.table("session").update({
             "report_url": public_url,
-            "active": False
         }).eq("id", session_id).execute()
 
         if not update_response.data:
