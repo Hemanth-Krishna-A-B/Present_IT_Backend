@@ -206,15 +206,15 @@ async def upload_file(file: UploadFile = File(...)):
     
 
 @app.post("/cleanup-unused-sessions")
-def cleanup_unused_sessions():
+def cleanup_unused_sessions(user_id: str = Query(..., description="User UUID to clean sessions for")):
     try:
-        sessions_response = supabase.table("session").select("*").eq("active", True).execute()
+        sessions_response = supabase.table("session").select("*").eq("active", True).eq("teacher_id", user_id).execute()
         active_sessions = sessions_response.data or []
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch active sessions: {str(e)}")
 
     if not active_sessions:
-        return {"message": "No active sessions to clean up."}
+        return {"message": f"No active sessions found for user {user_id} to clean up."}
 
     cleaned = []
 
@@ -231,6 +231,6 @@ def cleanup_unused_sessions():
             logging.warning(f"Failed to clean session {session_id}: {str(e)}")
 
     return {
-        "message": f"{len(cleaned)} sessions cleaned up and reports generated.",
+        "message": f"{len(cleaned)} sessions cleaned up and reports generated for user {user_id}.",
         "sessions": cleaned
     }
